@@ -5,8 +5,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.AngleStatistics;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,9 +43,15 @@ public class SwerveModule {
         driveMotor.getEncoder().setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
         turningMotor.getEncoder().setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
         turningMotor.getEncoder().setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
+        // set the encoder convert constants so that we can work with meters and radians
+        // instead of rotations(rpm)
 
         turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
+        // proportional term alone already does a good job of adjusting the wheel angle for turningMotor
         turningPidController.enableContinuousInput(-Math.PI, Math.PI);
+        // set the pid controller to be continous and considers -math.pi and math.pi to
+        // be the same point and automatically calculates the shortest route to the
+        // setpoint
 
         resetEncoders();
     }
@@ -65,10 +73,12 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        double angle = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
-        angle *= 2.0 * Math.PI;
-        angle -= absoluteEncoderOffsetRad;
-        return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+        double angleDeg = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
+        double angleRad = Units.degreesToRadians(angleDeg);
+        angleRad -= absoluteEncoderOffsetRad;
+        // subtract the offset to get the actual wheel angle
+        return angleRad * (absoluteEncoderReversed ? -1.0 : 1.0);
+        // multiply -1 if it's reversed
     }
 
     public void resetEncoders() {
@@ -85,10 +95,16 @@ public class SwerveModule {
             stop();
             return;
         }
+        // add a deadband
         state = SwerveModuleState.optimize(state, getState().angle);
+        // optimize the angle setpoint so it would never have to move more than 90 deg
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        // scale the velocity down using the robot's max speed
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        // use pid controller for turningMotor to calculate the output for the angle
+        // setpoint and current position
         SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
+        // send out some debug info
     }
 
     public void stop() {
