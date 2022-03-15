@@ -61,6 +61,7 @@ public class SwerveSubsystem extends SubsystemBase {
             } catch (Exception e) {
             }
         }).start();
+        // delay for 1 sec
     }
 
     public void zeroHeading() {

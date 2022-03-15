@@ -21,7 +21,7 @@ public class SwerveModule {
     private final CANSparkMax turningMotor;
 
     private final PIDController turningPidController;
-
+    
     private final AnalogInput absoluteEncoder;
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
