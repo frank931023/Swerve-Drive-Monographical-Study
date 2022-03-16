@@ -57,11 +57,11 @@ public class SwerveSubsystem extends SubsystemBase {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
+                // delay for 1 sec
                 zeroHeading();
             } catch (Exception e) {
-            }
+            }   
         }).start();
-        // delay for 1 sec
     }
 
     public void zeroHeading() {
@@ -70,6 +70,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public double getHeading() {
         return Math.IEEEremainder(gyro.getAngle(), 360);
+        // Clamp it within negative and postive 180 deg 
     }
 
     public Rotation2d getRotation2d() {
@@ -101,6 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+        // Proportionately decrease it to normalize the wheel speeds 
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);

@@ -95,11 +95,25 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
 
-        public static final int kDriverYAxis = 1;
-        public static final int kDriverXAxis = 0;
-        public static final int kDriverRotAxis = 4;
-        public static final int kDriverFieldOrientedButtonIdx = 1;
-
         public static final double kDeadband = 0.05;
+
+        public static final int leftStick_X = 0;
+        public static final int leftStick_Y = 1;
+        public static final int rightStick_X = 4;
+        public static final int rightStick_Y = 5;
+        public static final int trigger_L = 2;
+        public static final int trigger_R = 3;
+        public static final int Btn_A = 1;
+        public static final int Btn_B = 2;
+        public static final int Btn_X = 3;
+        public static final int Btn_Y = 4;
+        public static final int Btn_LB = 5;
+        public static final int Btn_RB = 6;
+        public static final int Btn_LS = 9;
+        public static final int Btn_RS = 10;
+        public static final int POV_UP = 0;
+        public static final int POV_DOWN = 180;
+        public static final int POV_RIGHT = 90;
+        public static final int POV_LEFT = 270;
     }
 }

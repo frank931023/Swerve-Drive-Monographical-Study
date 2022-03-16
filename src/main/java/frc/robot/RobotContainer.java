@@ -31,42 +31,46 @@ public class RobotContainer {
     public RobotContainer() {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
                 swerveSubsystem,
-                () -> -driverJoytick.getRawAxis(OIConstants.kDriverYAxis),
-                () -> driverJoytick.getRawAxis(OIConstants.kDriverXAxis),
-                () -> driverJoytick.getRawAxis(OIConstants.kDriverRotAxis),
-                () -> !driverJoytick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
+                () -> -driverJoytick.getRawAxis(OIConstants.leftStick_Y),
+                () -> driverJoytick.getRawAxis(OIConstants.leftStick_X),
+                () -> driverJoytick.getRawAxis(OIConstants.rightStick_X),
+                () -> !driverJoytick.getRawButton(OIConstants.Btn_A)));
 
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
-        new JoystickButton(driverJoytick, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
+        new JoystickButton(driverJoytick, OIConstants.Btn_B).whenPressed(() -> swerveSubsystem.zeroHeading());
     }
 
     public Command getAutonomousCommand() {
-        // 1. Create trajectory settings
+        // Create trajectory settings
         TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
                 AutoConstants.kMaxSpeedMetersPerSecond,
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
                         .setKinematics(DriveConstants.kDriveKinematics);
 
-        // 2. Generate trajectory
+        // Generate trajectory
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
+                // The initial point
                 List.of(
                         new Translation2d(1, 0),
                         new Translation2d(1, -1)),
+                // Some more points to go through
                 new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
+                // The final point
                 trajectoryConfig);
+                // trajectory Configuration
 
-        // 3. Define PID controllers for tracking trajectory
+        // Define PID controllers for tracking trajectory
         PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
         PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
         ProfiledPIDController thetaController = new ProfiledPIDController(
                 AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);  
 
-        // 4. Construct command to follow trajectory
+        // Construct command to follow trajectory
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
                 trajectory,
                 swerveSubsystem::getPose,
@@ -77,7 +81,8 @@ public class RobotContainer {
                 swerveSubsystem::setModuleStates,
                 swerveSubsystem);
 
-        // 5. Add some init and wrap-up, and return everything
+        // i am thinking that maybe this function is not a necessity and we should delete it
+        // Add some init and wrap-up, and return everything
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
                 swerveControllerCommand,
