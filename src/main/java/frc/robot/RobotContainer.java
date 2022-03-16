@@ -61,7 +61,7 @@ public class RobotContainer {
                 new Pose2d(2, -1, Rotation2d.fromDegrees(180)),
                 // The final point
                 trajectoryConfig);
-                // trajectory Configuration
+                // Trajectory Configuration
 
         // Define PID controllers for tracking trajectory
         PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
