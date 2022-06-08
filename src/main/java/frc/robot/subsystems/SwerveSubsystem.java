@@ -18,36 +18,36 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
             DriveConstants.kFrontLeftTurningEncoderReversed,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderPort,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
+            DriveConstants.kFrontLeftDriveCancoderPort,
+            DriveConstants.kFrontLeftDriveCancoderOffsetRad,
+            DriveConstants.kFrontLeftDriveCancoderReversed);
 
     private final SwerveModule frontRight = new SwerveModule(
             DriveConstants.kFrontRightDriveMotorPort,
             DriveConstants.kFrontRightTurningMotorPort,
             DriveConstants.kFrontRightDriveEncoderReversed,
             DriveConstants.kFrontRightTurningEncoderReversed,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderPort,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
+            DriveConstants.kFrontRightDriveCancoderPort,
+            DriveConstants.kFrontRightDriveCancoderOffsetRad,
+            DriveConstants.kFrontRightDriveCancoderReversed);
 
     private final SwerveModule backLeft = new SwerveModule(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
             DriveConstants.kBackLeftTurningEncoderReversed,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
+            DriveConstants.kBackLeftDriveCancoderPort,
+            DriveConstants.kBackLeftDriveCancoderOffsetRad,
+            DriveConstants.kBackLeftDriveCancoderReversed);
 
     private final SwerveModule backRight = new SwerveModule(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
-            DriveConstants.kBackRightDriveAbsoluteEncoderPort,
-            DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
-            DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+            DriveConstants.kBackRightDriveCancoderPort,
+            DriveConstants.kBackRightDriveCancoderOffsetRad,
+            DriveConstants.kBackRightDriveCancoderReversed);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,

@@ -1,6 +1,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,16 +23,16 @@ public class SwerveModule {
 
     private final PIDController turningPidController;
 
-    private final AnalogInput absoluteEncoder;
-    private final boolean absoluteEncoderReversed;
-    private final double absoluteEncoderOffsetRad;
+    private final CANCoder cancoder;
+    private final boolean cancoderReversed;
+    private final double cancoderOffsetRad;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+            int cancoderId, double cancoderOffset, boolean cancoderReversed) {
 
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
-        this.absoluteEncoderReversed = absoluteEncoderReversed;
-        absoluteEncoder = new AnalogInput(absoluteEncoderId);
+        this.cancoderOffsetRad = cancoderOffset;
+        this.cancoderReversed = cancoderReversed;
+        cancoder = new CANCoder(cancoderId);
 
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
@@ -72,18 +73,18 @@ public class SwerveModule {
         return turningMotor.getEncoder().getVelocity();
     }
 
-    public double getAbsoluteEncoderRad() {
-        double angleDeg = absoluteEncoder.getVoltage() / RobotController.getVoltage5V();
+    public double getCancoderRad() {
+        double angleDeg = cancoder.getBusVoltage() / RobotController.getVoltage5V();
         double angleRad = Units.degreesToRadians(angleDeg);
-        angleRad -= absoluteEncoderOffsetRad;
+        angleRad -= cancoderOffsetRad;
         // Subtract the offset to get the actual wheel angle
-        return angleRad * (absoluteEncoderReversed ? -1.0 : 1.0);
+        return angleRad * (cancoderReversed ? -1.0 : 1.0);
         // Multiply by -1 if it's reversed
     }
 
     public void resetEncoders() {
         driveMotor.getEncoder().setPosition(0);
-        turningMotor.getEncoder().setPosition(getAbsoluteEncoderRad());
+        turningMotor.getEncoder().setPosition(getCancoderRad());
     }
 
     public SwerveModuleState getState() {
@@ -99,11 +100,11 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle);
         // Optimize the angle setpoint so it would never have to move more than 90 deg
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        // SScale the velocity down using the robot's max speed
+        // Scale the velocity down using the robot's max speed
         turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // Use pid controller for turningMotor to calculate the output for the angle
         // setpoint and current position
-        SmartDashboard.putString("Swerve[" + absoluteEncoder.getChannel() + "] state", state.toString());
+        SmartDashboard.putString("Swerve[" + cancoder.getDeviceID() + "] state", state.toString());
         // Send out some debug info
     }
 
