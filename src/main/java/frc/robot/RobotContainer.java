@@ -10,38 +10,50 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.MecanumControllerCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.LiftConstants;
+import frc.robot.Constants.TransportConstants;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.TransportSubsystem;
 
 public class RobotContainer {
 
     private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    private final LiftSubsystem liftSubsystem = new LiftSubsystem();
+    private final TransportSubsystem transportSubsystem = new TransportSubsystem();
 
-    private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
+    private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
     public RobotContainer() {
         swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
                 swerveSubsystem,
-                () -> -driverJoytick.getRawAxis(OIConstants.leftStick_Y),
-                () -> driverJoytick.getRawAxis(OIConstants.leftStick_X),
-                () -> driverJoytick.getRawAxis(OIConstants.rightStick_X),
-                () -> !driverJoytick.getRawButton(OIConstants.Btn_A)));
+                () -> -driverJoystick.getRawAxis(OIConstants.leftStick_Y),
+                () -> driverJoystick.getRawAxis(OIConstants.leftStick_X),
+                () -> driverJoystick.getRawAxis(OIConstants.rightStick_X),
+                () -> !driverJoystick.getRawButton(OIConstants.Btn_A)));
                 // By default, it will operate in the fields reference frame
 
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
-        new JoystickButton(driverJoytick, OIConstants.Btn_B).whenPressed(() -> swerveSubsystem.zeroHeading());
+        new JoystickButton(driverJoystick, OIConstants.Btn_B).whenPressed(() -> swerveSubsystem.zeroHeading());
         // The button B can reset the robot heading to reset the direction of the field's reference
     }
 
@@ -90,7 +102,5 @@ public class RobotContainer {
                 new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
                 swerveControllerCommand,
                 new InstantCommand(() -> swerveSubsystem.stopModules()));
-        
-        return null;
     }
 }

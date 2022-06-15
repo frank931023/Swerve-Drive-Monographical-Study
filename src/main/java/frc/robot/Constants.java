@@ -123,4 +123,9 @@ public final class Constants {
         public static final int kRightMotorPort = 10;
         public static final double kLiftSpeed = 0.5;
     }
+
+    public static final class TransportConstants {
+        public static final int kTransMotorPort = 11;
+        public static final double kTransSpeed = 0.5;
+    }
 }
