@@ -33,6 +33,9 @@ public class SwerveModule {
         this.cancoderOffsetRad = cancoderOffset;
         this.cancoderReversed = cancoderReversed;
         cancoder = new CANCoder(cancoderId);
+        
+        // Sets the signage and range of the “Absolute Position” signal. 
+        // cancoder.setPositionToAbsolute();
 
         driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
         turningMotor = new CANSparkMax(turningMotorId, MotorType.kBrushless);
@@ -75,7 +78,7 @@ public class SwerveModule {
 
     public double getCancoderRad() {
         double angleDeg = cancoder.getBusVoltage() / RobotController.getVoltage5V();
-        double angleRad = Units.degreesToRadians(angleDeg);
+        double angleRad = Units.degreesToRadians(angleDeg); 
         angleRad -= cancoderOffsetRad;
         // Subtract the offset to get the actual wheel angle
         return angleRad * (cancoderReversed ? -1.0 : 1.0);
@@ -84,7 +87,7 @@ public class SwerveModule {
 
     public void resetEncoders() {
         driveMotor.getEncoder().setPosition(0);
-        turningMotor.getEncoder().setPosition(getCancoderRad());
+        turningMotor.getEncoder().setPosition(getCancoderRad()); 
     }
 
     public SwerveModuleState getState() {

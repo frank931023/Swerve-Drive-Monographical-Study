@@ -6,24 +6,23 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
-    // all parameters are yet to be changed
 
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
-        public static final double kDriveMotorGearRatio = 1 / 5.8462;
-        public static final double kTurningMotorGearRatio = 1 / 18.0;
+        public static final double kDriveMotorGearRatio = 1 / 6.55;
+        public static final double kTurningMotorGearRatio = 1 / 10.28;
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
         public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-        public static final double kPTurning = 0.5;
+        public static final double kPTurning = 0.25;
     }
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(21);
+        public static final double kTrackWidth = 0.53975;
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(25.5);
+        public static final double kWheelBase = 0.53975;
         // Distance between front and back wheels
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -32,21 +31,21 @@ public final class Constants {
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
 
         // Drive motor ports
-        public static final int kFrontLeftDriveMotorPort = 8;
+        public static final int kFrontLeftDriveMotorPort = 1;
         public static final int kBackLeftDriveMotorPort = 2;
-        public static final int kFrontRightDriveMotorPort = 6;
+        public static final int kFrontRightDriveMotorPort = 3;
         public static final int kBackRightDriveMotorPort = 4;
 
         // Turning motor ports
-        public static final int kFrontLeftTurningMotorPort = 7;
-        public static final int kBackLeftTurningMotorPort = 1;
-        public static final int kFrontRightTurningMotorPort = 5;
-        public static final int kBackRightTurningMotorPort = 3;
+        public static final int kFrontLeftTurningMotorPort = 5;
+        public static final int kBackLeftTurningMotorPort = 6;
+        public static final int kFrontRightTurningMotorPort = 7;
+        public static final int kBackRightTurningMotorPort = 8;
 
         // Cancoder ports
         public static final int kFrontLeftDriveCancoderPort = 0;
-        public static final int kBackLeftDriveCancoderPort = 2;
-        public static final int kFrontRightDriveCancoderPort = 1;
+        public static final int kBackLeftDriveCancoderPort = 1;
+        public static final int kFrontRightDriveCancoderPort = 2;
         public static final int kBackRightDriveCancoderPort = 3;
 
         public static final boolean kFrontLeftTurningEncoderReversed = true;

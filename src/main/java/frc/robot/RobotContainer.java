@@ -35,12 +35,14 @@ public class RobotContainer {
                 () -> driverJoytick.getRawAxis(OIConstants.leftStick_X),
                 () -> driverJoytick.getRawAxis(OIConstants.rightStick_X),
                 () -> !driverJoytick.getRawButton(OIConstants.Btn_A)));
+                // By default, it will operate in the fields reference frame
 
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
         new JoystickButton(driverJoytick, OIConstants.Btn_B).whenPressed(() -> swerveSubsystem.zeroHeading());
+        // The button B can reset the robot heading to reset the direction of the field's reference
     }
 
     public Command getAutonomousCommand() {
@@ -51,6 +53,7 @@ public class RobotContainer {
                         .setKinematics(DriveConstants.kDriveKinematics);
 
         // Generate trajectory
+        // This part may be altered cuz...  
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
                 new Pose2d(0, 0, new Rotation2d(0)),
                 // The initial point
@@ -81,11 +84,13 @@ public class RobotContainer {
                 swerveSubsystem::setModuleStates,
                 swerveSubsystem);
 
-        // i am thinking that maybe this function is not a necessity and we should delete it
+        // I am thinking that maybe this function is not a necessity and we should delete it
         // Add some init and wrap-up, and return everything
         return new SequentialCommandGroup(
                 new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
                 swerveControllerCommand,
                 new InstantCommand(() -> swerveSubsystem.stopModules()));
+        
+        return null;
     }
 }
