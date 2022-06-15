@@ -117,4 +117,10 @@ public final class Constants {
         public static final int POV_RIGHT = 90;
         public static final int POV_LEFT = 270;
     }
+
+    public static final class LiftConstants {
+        public static final int kLeftMotorPort = 9;
+        public static final int kRightMotorPort = 10;
+        public static final double kLiftSpeed = 0.5;
+    }
 }
